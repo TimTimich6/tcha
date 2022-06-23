@@ -9,12 +9,16 @@ const client = new MongoClient(uri);
   });
 })();
 
-export const createUser = async (body: any) => {
+export const createUser = async (username: string, password: string) => {
   const result = await client.db("chattingapp").collection("users").insertOne({
-    email: body.email,
-    password: body.password,
-    interests: body.interests,
+    username: username,
+    password: password,
   });
   return result;
 };
+
+export interface newUser {
+  username: string;
+  password: string;
+}
 // getAllExamples();
