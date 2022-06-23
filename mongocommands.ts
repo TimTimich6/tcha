@@ -1,6 +1,6 @@
 import { MongoClient, WithId } from "mongodb";
 
-const uri: string = "mongodb+srv://tim:tallkitten47@cluster0.k1aaw.mongodb.net/xpgrinder?retryWrites=true&w=majority";
+const uri: string = `mongodb+srv://tim:${process.env.MONGOPASS}@cluster0.k1aaw.mongodb.net/xpgrinder?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 (async () => {
   await client.connect().catch((err) => {
