@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node build/server.js",
+    "start": "node ./build/server.js",
     "tsc": "./node_modules/typescript/bin/tsc",
     "build": "./node_modules/typescript/bin/tsc",
-    "postinstall": "npm run build",
+    "postinstall": "tsc",
     "dev": "nodemon src/server.ts"
   },
   "keywords": [],
