@@ -1,6 +1,7 @@
 import { MongoClient, WithId } from "mongodb";
-
-const uri: string = `mongodb+srv://tim:${process.env.MONGOPASS}@cluster0.k1aaw.mongodb.net/xpgrinder?retryWrites=true&w=majority`;
+import dotenv from "dotenv";
+dotenv.config();
+const uri: string = `mongodb+srv://tim:${process.env.MONGOPASS}@cluster0.k1aaw.mongodb.net/chattingapp?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 (async () => {
   await client.connect().catch((err) => {
@@ -9,7 +10,7 @@ const client = new MongoClient(uri);
 })();
 
 export const createUser = async (body: any) => {
-  const result = await client.db("startup").collection("users").insertOne({
+  const result = await client.db("chattingapp").collection("users").insertOne({
     email: body.email,
     password: body.password,
     interests: body.interests,

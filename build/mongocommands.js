@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = void 0;
 const mongodb_1 = require("mongodb");
-const uri = `mongodb+srv://tim:${process.env.MONGOPASS}@cluster0.k1aaw.mongodb.net/xpgrinder?retryWrites=true&w=majority`;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const uri = `mongodb+srv://tim:${process.env.MONGOPASS}@cluster0.k1aaw.mongodb.net/chattingapp?retryWrites=true&w=majority`;
 const client = new mongodb_1.MongoClient(uri);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield client.connect().catch((err) => {
@@ -19,7 +24,7 @@ const client = new mongodb_1.MongoClient(uri);
     });
 }))();
 const createUser = (body) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield client.db("startup").collection("users").insertOne({
+    const result = yield client.db("chattingapp").collection("users").insertOne({
         email: body.email,
         password: body.password,
         interests: body.interests,

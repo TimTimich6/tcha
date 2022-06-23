@@ -37,7 +37,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db = __importStar(require("./mongocommands"));
+const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 const PORT = process.env.PORT || 3080;
 app.post("/api/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
@@ -55,6 +60,10 @@ app.post("/api/login", (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 app.get("/", (req, res) => {
     res.send("congrats retard it worked");
+});
+app.post("/api", (req, res) => {
+    console.log("received");
+    res.json(req.body);
 });
 app.listen(PORT, () => {
     console.log("listening on port", PORT);
