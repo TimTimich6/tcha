@@ -30,6 +30,7 @@ app.get("/", (req, res) => {
 });
 app.post("/api", (req, res) => {
   console.log("received /api");
+  console.log("data", req.body);
 
   res.json(req.body);
 });
