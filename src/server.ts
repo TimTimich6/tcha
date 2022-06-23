@@ -24,10 +24,12 @@ app.post("/api/login", async (req, res) => {
   console.log();
 });
 app.get("/", (req, res) => {
+  console.log("received /");
+
   res.send("congrats retard it worked");
 });
 app.post("/api", (req, res) => {
-  console.log("received");
+  console.log("received /api");
 
   res.json(req.body);
 });
