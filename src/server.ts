@@ -18,6 +18,9 @@ app.post("/api/login", async (req, res) => {
   }
   console.log();
 });
+app.get("/", (req, res) => {
+  res.send("congrats retard it worked");
+});
 app.listen(PORT, () => {
   console.log("listening on port", PORT);
 });
