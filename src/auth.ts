@@ -18,19 +18,3 @@ export const isAuthed = (req: Request | any, res: Response, next: Function) => {
     res.status(400).json({ title: "Sign In Error", description: "Resign in with discord" });
   }
 };
-
-export const hasRole = async (req: any, res: Response, next: Function) => {
-  try {
-    if (req.jwt) {
-      const result = await getByUserid(req.jwt.userid);
-      if (result) {
-        if (result.roles.includes("961160369060065300")) {
-          req.user = result;
-          next();
-        } else return res.status(400).json({ title: "Role error", description: "Doesn't have Holder role id 943411970965663754" });
-      }
-    }
-  } catch (error) {
-    res.status(400).json({ title: "Sign In Error", description: "Resign in with discord" });
-  }
-};
