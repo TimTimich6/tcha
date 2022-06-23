@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node build/server.js",
     "dev": "nodemon src/server.ts",
-    "tsc": "./node_modules/typescript/bin/tsc",
-    "build": "tsc"
+    "tsc": "./node_modules/typescript/bin/tsc"
   },
   "keywords": [],
   "author": "",
