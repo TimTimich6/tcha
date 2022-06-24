@@ -22,10 +22,15 @@ export const loginUser = async (username: string, password: string): Promise<nul
   return result;
 };
 
-export const getPassword = async (username: string): Promise<WithId<Document> | null> => {
+export const getUserFromUsername = async (username: string): Promise<WithId<Document> | null> => {
   const result = await client.db("chattingapp").collection("users").findOne({ username });
   return result;
 };
+
+export const resetPassword = async (username: string, password: string): Promise<void> => {
+  await client.db("chattingapp").collection("users").updateOne({ username }, { $set: { password } });
+};
+
 export interface UserQuery {
   username: string;
   password: string;
