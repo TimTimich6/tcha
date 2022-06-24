@@ -66,9 +66,7 @@ app.post("/api/forgetpassword", async (req, res) => {
           }
         });
         res.json({ message: "sent email" });
-      } else {
-        res.json({ message: "sent email" });
-      }
+      } else throw "User doesn't exist";
     }
   } catch (error) {
     res.json({ error, success: false });
