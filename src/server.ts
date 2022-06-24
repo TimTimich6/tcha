@@ -3,6 +3,7 @@ import * as db from "./mongocommands";
 import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
+import nodemailer from "nodemailer";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -30,9 +31,37 @@ app.post("/api/login", async (req, res) => {
   try {
     const response = await db.loginUser(body.username, body.password);
     if (response == null) throw { message: "null value" };
-    res.json({ message: "successful signin", time: Date.now() });
+    res.json({ message: "successful signin", time: Date.now(), success: true });
   } catch (error) {
-    res.json(error);
+    res.json({ error, success: false });
+  }
+});
+
+app.post("/api/forgetpassword", async (req, res) => {
+  const email = req.query.email;
+  if (email) {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "davidtbuford@gmail.com",
+        pass: "tallkitten47",
+      },
+    });
+
+    var mailOptions = {
+      from: "davidtbuford@gmail.com",
+      to: <string>email,
+      subject: "fuck off",
+      html: "<h1>You can suck my dick</p>",
+    };
+
+    transporter.sendMail(mailOptions, function (error: any, info: any) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
   }
 });
 
