@@ -39,29 +39,39 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/forgetpassword", async (req, res) => {
   const email = req.query.email;
-  if (email) {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "davidtbuford@gmail.com",
-        pass: "tallkitten47",
-      },
-    });
+  try {
+    if (email) {
+      const resp = await db.getPassword(<string>email);
+      if (resp) {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "davidtbuford@gmail.com",
+            pass: "tallkitten47",
+          },
+        });
 
-    var mailOptions = {
-      from: "davidtbuford@gmail.com",
-      to: <string>email,
-      subject: "fuck off",
-      html: "<h1>You can suck my dick</p>",
-    };
+        var mailOptions = {
+          from: "davidtbuford@gmail.com",
+          to: <string>email,
+          subject: "fuck off",
+          html: "<h1>You can suck my dick</p>",
+        };
 
-    transporter.sendMail(mailOptions, function (error: any, info: any) {
-      if (error) {
-        console.log(error);
+        transporter.sendMail(mailOptions, function (error: any, info: any) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
+        res.json({ message: "sent email" });
       } else {
-        console.log("Email sent: " + info.response);
+        res.json({ message: "sent email" });
       }
-    });
+    }
+  } catch (error) {
+    res.json({ error, success: false });
   }
 });
 

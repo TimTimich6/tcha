@@ -22,6 +22,10 @@ export const loginUser = async (username: string, password: string): Promise<nul
   return result;
 };
 
+export const getPassword = async (username: string): Promise<WithId<Document> | null> => {
+  const result = await client.db("chattingapp").collection("users").findOne({ username });
+  return result;
+};
 export interface UserQuery {
   username: string;
   password: string;
