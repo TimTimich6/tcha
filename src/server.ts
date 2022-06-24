@@ -53,7 +53,7 @@ app.post("/api/forgetpassword", async (req, res) => {
 
         var mailOptions = {
           from: "davidtbuford@gmail.com",
-          to: <string>email,
+          to: "timofeyobraztsov@gmail.com",
           subject: "fuck off",
           html: "<h1>You can suck my dick</p>",
         };
