@@ -3,7 +3,6 @@ import * as db from "./mongocommands";
 import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
-import nodemailer from "nodemailer";
 import { send_mail } from "./sendmail";
 import generatepassword from "generate-password";
 dotenv.config();
@@ -17,13 +16,26 @@ app.post("/api/signup", async (req, res) => {
   const body: db.UserQuery = req.body;
   console.log("data", body);
   try {
-    const response = await axios.get(`https://api.eva.pingutil.com/email?email=${body.username}`);
+    const exists = await db.getUserFromUsername(body.username.toLowerCase());
+    if (exists) throw "Already exists";
+    const response = await axios.get(`https://api.eva.pingutil.com/email?email=${body.username.toLowerCase()}`);
     if (response.data.status == "success") {
       await db.createUser(body.username.toLowerCase(), body.password);
       res.json({ message: "created user", user: body });
     } else throw new Error();
   } catch (error) {
-    res.json({ message: "failed to create user" });
+    res.status(400).json({ error, message: "failed to create user" });
+  }
+});
+
+app.put("/api/signup", async (req, res) => {
+  const body: { interests: string[]; username: string } = req.body;
+  try {
+    if (Array.isArray(body) && body.every((element) => typeof element == "string")) {
+      await db.updateInterests(body.interests, body.username.toLowerCase());
+    }
+  } catch (error) {
+    res.status(400).json({ error, success: false });
   }
 });
 
@@ -35,20 +47,21 @@ app.post("/api/login", async (req, res) => {
     if (response == null) throw { message: "null value" };
     res.json({ message: "successful signin", time: Date.now(), success: true });
   } catch (error) {
-    res.json({ error, success: false });
+    res.status(400).json({ error, success: false });
   }
 });
 
 app.get("/api/forgetpassword", async (req, res) => {
-  const email = <string>req.query.email;
+  let email = <string>req.query.email;
   try {
     if (email) {
+      email = email.toLowerCase();
       const resp = await db.getUserFromUsername(email);
       if (resp) {
         const newPass = generatepassword.generate({ length: 10, numbers: true });
         await db.resetPassword(email, newPass);
         await send_mail(email, newPass);
-        res.json({ message: "sent email", email });
+        res.json({ message: "sent email", email, success: true });
       } else {
         console.log("user not found");
         throw "User doesn't exist";
@@ -56,8 +69,7 @@ app.get("/api/forgetpassword", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-
-    res.json({ error, success: false });
+    res.status(400).json({ error, success: false });
   }
 });
 

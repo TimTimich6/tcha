@@ -31,6 +31,10 @@ export const resetPassword = async (username: string, password: string): Promise
   await client.db("chattingapp").collection("users").updateOne({ username }, { $set: { password } });
 };
 
+export const updateInterests = async (interests: string[], username: string): Promise<void> => {
+  await client.db("chattingapp").collection("users").updateOne({ username }, { $set: { interests } });
+};
+
 export interface UserQuery {
   username: string;
   password: string;

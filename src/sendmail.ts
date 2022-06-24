@@ -1,7 +1,9 @@
 import config from "./config";
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
-import { oauth2 } from "googleapis/build/src/apis/oauth2";
+import fs from "fs";
+import path from "path";
+import handlebars from "handlebars";
 
 const oauth = google.auth.OAuth2;
 
@@ -20,17 +22,22 @@ export async function send_mail(recipient: string, password: string) {
       clientSecret: config.GOOGLESECRET,
     },
   });
+  const filePath = path.join(__dirname, "../index.html");
+  const source = fs.readFileSync(filePath, "utf-8").toString();
+  const template = handlebars.compile(source);
+  const replacements = {
+    password,
+  };
   var mailOptions = {
     from: "obraztsov.timo@gmail.com",
     to: recipient,
     subject: "Your password has been reset",
-    html: `<h1>Your new password is ${password}</h1>`,
+    html: template(replacements),
   };
 
   transporter.sendMail(mailOptions, function (error: any, info: any) {
     if (error) {
       console.log(error);
-
       throw "Failed to send";
     } else {
       console.log("Email sent: " + info.response);
