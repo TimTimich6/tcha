@@ -13,6 +13,7 @@ export const createUser = async (username: string, password: string) => {
   await client.db("chattingapp").collection("users").insertOne({
     username: username,
     password: password,
+    creationtime: Date.now(),
   });
 };
 
