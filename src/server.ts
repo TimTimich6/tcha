@@ -29,10 +29,11 @@ app.post("/api/signup", async (req, res) => {
 });
 
 app.put("/api/signup", async (req, res) => {
-  const body: { interests: string[]; username: string } = req.body;
+  const body: { interests: string; username: string } = req.body;
   try {
     if (typeof body.interests == "string") {
-      await db.updateInterests(body.interests, body.username.toLowerCase());
+      const interests = body.interests.split(":");
+      await db.updateInterests(interests, body.username.toLowerCase());
       res.json({ message: "successfully updated interests", success: true });
     } else throw "Incorrect body";
   } catch (error) {
