@@ -31,9 +31,10 @@ app.post("/api/signup", async (req, res) => {
 app.put("/api/signup", async (req, res) => {
   const body: { interests: string[]; username: string } = req.body;
   try {
-    if (Array.isArray(body) && body.every((element) => typeof element == "string")) {
+    if (Array.isArray(body.interests) && body.interests.every((element) => typeof element == "string")) {
       await db.updateInterests(body.interests, body.username.toLowerCase());
-    }
+      res.json({ message: "successfully updated interests", success: true });
+    } else throw "Incorrect body";
   } catch (error) {
     res.status(400).json({ error, success: false });
   }
