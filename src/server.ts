@@ -33,6 +33,9 @@ app.put("/api/signup", async (req, res) => {
   try {
     if (typeof body.interests == "string") {
       const interests = body.interests.split(":");
+      console.log("interests", interests);
+      console.log("email", body.username);
+
       await db.updateInterests(interests, body.username.toLowerCase());
       res.json({ message: "successfully updated interests", success: true });
     } else throw "Incorrect body";
