@@ -91,10 +91,10 @@ app.post("/api/chatroom", async (req, res) => {
 });
 
 app.get("/api/chatroom", async (req, res) => {
-  const body: { username: string } = req.body;
+  const username = <string>req.query.username;
   try {
-    if (!body.username) throw "No username";
-    const rooms = await db.getChatroomsFromUser(body.username);
+    if (!username) throw "No username";
+    const rooms = await db.getChatroomsFromUser(username);
     res.json({ success: true, chatrooms: rooms });
   } catch (error) {
     res.status(401).json({ error, success: false });
