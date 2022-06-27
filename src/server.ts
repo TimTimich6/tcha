@@ -83,6 +83,8 @@ app.post("/chatroom", async (req, res) => {
   const body: { username: string; tag: string; title: string } = req.body;
   try {
     if (!body.username || !body.tag || !body.title) throw "property missing";
+    await db.createChatRoom(body.username, body.title, body.tag);
+    res.json({ message: "created chatroom", username: body.username, success: true });
   } catch (error) {
     res.status(401).json({ error, success: false });
   }
