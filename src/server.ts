@@ -11,11 +11,10 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("common"));
 const PORT = process.env.PORT || 3080;
 
 app.post("/api/signup", async (req, res) => {
-  console.log("received post /api/signup");
   const body: db.UserQuery = req.body;
   console.log("data", body);
   try {
@@ -48,7 +47,6 @@ app.put("/api/signup", async (req, res) => {
 });
 
 app.post("/api/login", async (req, res) => {
-  console.log("received post /api/login");
   const body: db.UserQuery = req.body;
   try {
     const response = await db.loginUser(body.username.toLowerCase(), body.password);
@@ -81,8 +79,16 @@ app.get("/api/forgetpassword", async (req, res) => {
   }
 });
 
+app.post("/chatroom", async (req, res) => {
+  const body: { username: string; tag: string; title: string } = req.body;
+  try {
+    if (!body.username || !body.tag || !body.title) throw "property missing";
+  } catch (error) {
+    res.status(401).json({ error, success: false });
+  }
+});
+
 app.post("/api", async (req, res) => {
-  console.log("received /api");
   res.send("/switched url to /api/signup");
 });
 app.listen(PORT, () => {
