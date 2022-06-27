@@ -79,7 +79,7 @@ app.get("/api/forgetpassword", async (req, res) => {
   }
 });
 
-app.post("/chatroom", async (req, res) => {
+app.post("/api/chatroom", async (req, res) => {
   const body: { username: string; tag: string; title: string } = req.body;
   try {
     if (!body.username || !body.tag || !body.title) throw "property missing";
