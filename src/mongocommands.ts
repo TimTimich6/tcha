@@ -38,7 +38,7 @@ export const updateInterests = async (interests: string[], username: string): Pr
 export const createChatRoom = async (username: string, title: string, tag: string): Promise<void> => {
   await client
     .db("chattingapp")
-    .collection("users")
+    .collection("chatrooms")
     .insertOne({ username, title, tag, deletetime: Date.now() + 86_400_0000, creationtime: Date.now() });
 };
 
