@@ -90,6 +90,16 @@ app.post("/api/chatroom", async (req, res) => {
   }
 });
 
+app.get("/api/chatroom", async (req, res) => {
+  const body: { username: string } = req.body;
+  try {
+    if (!body.username) throw "No username";
+    const rooms = await db.getChatroomsFromUser(body.username);
+    res.json({ success: true, chatrooms: rooms });
+  } catch (error) {
+    res.status(401).json({ error, success: false });
+  }
+});
 app.post("/api", async (req, res) => {
   res.send("/switched url to /api/signup");
 });

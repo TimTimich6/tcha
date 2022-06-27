@@ -39,7 +39,13 @@ export const createChatRoom = async (username: string, title: string, tag: strin
   await client
     .db("chattingapp")
     .collection("chatrooms")
-    .insertOne({ username, title, tag, deletetime: Date.now() + 86_400_0000, creationtime: Date.now() });
+    .insertOne({ username, title, tag: tag.trim(), deletetime: Date.now() + 86_400_0000, creationtime: Date.now() });
+};
+
+export const getChatroomsFromUser = async (username: string): Promise<WithId<Document>[] | null> => {
+  const result = await client.db("chattingapp").collection("chatrooms").find({ username }).toArray();
+  if (result) return result;
+  return [];
 };
 
 export interface UserQuery {
