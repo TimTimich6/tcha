@@ -29,10 +29,10 @@ app.post("/api/signup", async (req, res) => {
 });
 
 app.put("/api/signup", async (req, res) => {
-  const body: { interests: string; username: string } = req.body;
+  const body: { interests: Array<string>; username: string } = req.body;
   try {
-    if (typeof body.interests == "string") {
-      const interests = body.interests.split(":");
+    if (Array.isArray(body.interests)) {
+      const interests = body.interests;
       console.log("interests", interests);
       console.log("email", body.username);
 
