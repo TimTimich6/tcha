@@ -5,10 +5,13 @@ import dotenv from "dotenv";
 import axios from "axios";
 import { send_mail } from "./sendmail";
 import generatepassword from "generate-password";
+import morgan from "morgan";
+
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(morgan("tiny"));
 const PORT = process.env.PORT || 3080;
 
 app.post("/api/signup", async (req, res) => {
@@ -21,7 +24,7 @@ app.post("/api/signup", async (req, res) => {
     const response = await axios.get(`https://api.eva.pingutil.com/email?email=${body.username.toLowerCase()}`);
     if (response.data.status == "success") {
       await db.createUser(body.username.toLowerCase(), body.password);
-      res.json({ message: "created user", user: body });
+      res.json({ message: "successful signin", user: body });
     } else throw new Error();
   } catch (error) {
     res.status(400).json({ error, message: "failed to create user" });
