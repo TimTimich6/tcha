@@ -95,7 +95,9 @@ app.get("/api/chatroom", async (req, res) => {
   try {
     if (!username) throw "No username";
     const rooms = await db.getChatroomsFromUser(username);
-    res.json({ success: true, chatrooms: rooms });
+
+    if (rooms) res.json({ success: true, chatrooms: rooms });
+    else res.json({ success: true, chatrooms: [] });
   } catch (error) {
     res.status(401).json({ error, success: false });
   }
