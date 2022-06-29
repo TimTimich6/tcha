@@ -52,6 +52,18 @@ export const getChatroomsFromUser = async (username: string): Promise<WithId<Doc
   return [];
 };
 
+export const getByInterest = async (username: string): Promise<WithId<Document>[] | null> => {
+  const user = await client.db("chattingapp").collection("users").findOne({ username });
+  if (user) {
+    const rooms = await client
+      .db("chattingapp")
+      .collection("chatroom")
+      .find({ tag: { $in: user.interests } })
+      .toArray();
+    return rooms;
+  } else return [];
+};
+
 export interface UserQuery {
   username: string;
   password: string;

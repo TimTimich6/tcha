@@ -110,6 +110,26 @@ app.get("/api/chatroom", async (req, res) => {
     res.status(401).json({ error, success: false });
   }
 });
+
+app.get("/api/chatroom/all", async (req, res) => {
+  const username = <string>req.query.username;
+  try {
+    if (!username) throw "No username";
+    const rooms = await db.getByInterest(username);
+
+    if (rooms) {
+      const formatted: any = {};
+      for (let index = 0; index < rooms.length; index++) {
+        const element = rooms[index];
+        formatted[index] = { title: element.title, tag: element.tag };
+      }
+      console.log("formatted", formatted);
+      res.json(formatted);
+    } else res.json([]);
+  } catch (error) {
+    res.status(401).json({ error, success: false });
+  }
+});
 app.post("/api", async (req, res) => {
   res.send("/switched url to /api/signup");
 });
