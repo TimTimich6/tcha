@@ -43,7 +43,11 @@ export const createChatRoom = async (username: string, title: string, tag: strin
 };
 
 export const getChatroomsFromUser = async (username: string): Promise<WithId<Document>[] | null> => {
-  const result = await client.db("chattingapp").collection("chatrooms").find({ username }).toArray();
+  const result = await client
+    .db("chattingapp")
+    .collection("chatrooms")
+    .find({ username }, { projection: { title: 1, tag: 1 } })
+    .toArray();
   if (result) return result;
   return [];
 };
