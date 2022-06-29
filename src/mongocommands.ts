@@ -32,14 +32,14 @@ export const resetPassword = async (username: string, password: string): Promise
 };
 
 export const updateInterests = async (interests: string[], username: string): Promise<void> => {
-  await client.db("chattingapp").collection("users").updateOne({ username }, { $set: { interests } });
+  await client.db("chattingapp").collection("users").updateOne({ username: username.toLowerCase() }, { $set: { interests } });
 };
 
 export const createChatRoom = async (username: string, title: string, tag: string): Promise<void> => {
   await client
     .db("chattingapp")
     .collection("chatrooms")
-    .insertOne({ username, title: title.trim(), tag: tag.trim(), deletetime: Date.now() + 86_400_0000, creationtime: Date.now() });
+    .insertOne({ username, title: title.trim().toLowerCase(), tag: tag.trim(), deletetime: Date.now() + 86_400_0000, creationtime: Date.now() });
 };
 
 export const getChatroomsFromUser = async (username: string): Promise<WithId<Document>[] | null> => {
@@ -53,13 +53,16 @@ export const getChatroomsFromUser = async (username: string): Promise<WithId<Doc
 };
 
 export const getByInterest = async (username: string): Promise<WithId<Document>[] | null> => {
-  const user = await client.db("chattingapp").collection("users").findOne({ username });
+  const user = await client.db("chattingapp").collection("users").findOne({ username: username.toLowerCase() });
+  console.log(user);
   if (user) {
+    const interests: string[] = user.interests;
     const rooms = await client
       .db("chattingapp")
-      .collection("chatroom")
-      .find({ tag: { $in: user.interests } })
+      .collection("chatrooms")
+      .find({ tag: { $in: interests } })
       .toArray();
+    console.log(rooms);
     return rooms;
   } else return [];
 };

@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("common"));
-const PORT = process.env.PORT || 3080;
+const PORT = process.env.PORT || 3090;
 
 app.post("/api/signup", async (req, res) => {
   const body: db.UserQuery = req.body;
