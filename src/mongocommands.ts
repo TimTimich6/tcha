@@ -46,7 +46,7 @@ export const getChatroomsFromUser = async (username: string): Promise<WithId<Doc
   const result = await client
     .db("chattingapp")
     .collection("chatrooms")
-    .find({ username }, { projection: { title: 1, tag: 1, _id: 0 } })
+    .find({ username }, { projection: { title: 1, tag: 1, deletetime: 1, _id: 0 } })
     .toArray();
   if (result) return result;
   return [];

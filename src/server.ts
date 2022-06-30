@@ -100,7 +100,7 @@ app.get("/api/chatroom", async (req, res) => {
       const formatted: any = {};
       for (let index = 0; index < rooms.length; index++) {
         const element = rooms[index];
-        formatted[index] = { title: element.title, tag: element.tag };
+        formatted[index] = { title: element.title, tag: element.tag, time: element.deletetime };
       }
       console.log("formatted", formatted);
 
