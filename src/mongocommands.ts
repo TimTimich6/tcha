@@ -7,6 +7,12 @@ const client = new MongoClient(uri);
   await client.connect().catch((err) => {
     console.error(err);
   });
+  setInterval(async () => {
+    await client
+      .db("chattingapp")
+      .collection("users")
+      .deleteMany({ deletime: { $lt: Date.now() } });
+  }, 60000);
 })();
 
 export const createUser = async (username: string, password: string) => {
@@ -39,7 +45,7 @@ export const createChatRoom = async (username: string, title: string, tag: strin
   await client
     .db("chattingapp")
     .collection("chatrooms")
-    .insertOne({ username, title: title.trim().toLowerCase(), tag: tag.trim(), deletetime: Date.now() + 86_400_000, creationtime: Date.now() });
+    .insertOne({ username, title: title.trim().toLowerCase(), tag: tag.trim(), deletetime: Date.now() + 2 * 60000, creationtime: Date.now() });
 };
 
 export const getChatroomsFromUser = async (username: string): Promise<WithId<Document>[] | null> => {
